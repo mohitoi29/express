@@ -3,7 +3,7 @@ const express=require("express")
 const app=express();
 
 var users=[{
-  name:"ohn",
+  name:"John",
   kidney:[{
     healthy:false
   }]
@@ -43,7 +43,10 @@ app.put("/",function(req,res){
   res.json({});
 })
 app.delete("/",function(req,res){
-  const newKidney=[];
+  //What if there is no unHeathy Kidney Then We need to Return 411 wrong input status code
+  if(ThereIsUnhealthy())
+  { 
+    const newKidney=[];
   for(let i=0;i<users[0].kidney.length;i++){
     if(users[0].kidney[i].healthy)
       newKidney.push({
@@ -53,5 +56,20 @@ app.delete("/",function(req,res){
   res.json({
     msg:"Done"
   })
+  }
+  else{
+    res.status(411).json({
+      msg:"No Unhealthy kidney"
+    })
+  }
 })
+functon ThereIsUnhealthy()
+{
+  let Unhealthy=false;
+  for(let i=0;i<users[0].kidney.length;i++){
+    if(!users[0].kidney[i].healthy)
+       Unhealthy=true;
+  }
+    return Unhealthy;
+ }
 app.listen(3001);
